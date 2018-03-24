@@ -157,10 +157,14 @@ struct bpf_call_arg_meta {
  * bpf_check() is called under lock, so no race to access these global vars
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 static struct bpf_verifier_log verifier_log;
 =======
 static struct bpf_verifer_log verifier_log;
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+static struct bpf_verifier_log verifier_log;
+>>>>>>> 41bf385c9ecf (BACKPORT: bpf: Rename bpf_verifer_log)
 
 static DEFINE_MUTEX(bpf_verifier_lock);
 
@@ -206,7 +210,7 @@ EXPORT_SYMBOL_GPL(bpf_verifier_log_write);
  */
 static __printf(1, 2) void verbose(const char *fmt, ...)
 {
-	struct bpf_verifer_log *log = &verifier_log;
+	struct bpf_verifier_log *log = &verifier_log;
 	va_list args;
 
 <<<<<<< HEAD
@@ -5177,10 +5181,14 @@ static void free_states(struct bpf_verifier_env *env)
 int bpf_check(struct bpf_prog **prog, union bpf_attr *attr)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	struct bpf_verifier_log *log = &verifier_log;
 =======
 	struct bpf_verifer_log *log = &verifier_log;
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+	struct bpf_verifier_log *log = &verifier_log;
+>>>>>>> 41bf385c9ecf (BACKPORT: bpf: Rename bpf_verifer_log)
 	struct bpf_verifier_env *env;
 	int ret = -EINVAL;
 
