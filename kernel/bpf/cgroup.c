@@ -96,7 +96,7 @@ static int compute_effective_progs(struct cgroup *cgrp,
 				   struct bpf_prog_array __rcu **array)
 {
 
-	struct bpf_prog_array __rcu *progs;
+	struct bpf_prog_array *progs;
 	struct bpf_prog_list *pl;
 	struct cgroup *p = cgrp;
 	int cnt = 0;
@@ -122,20 +122,28 @@ static int compute_effective_progs(struct cgroup *cgrp,
 				if (!pl->prog)
 					continue;
 <<<<<<< HEAD
+<<<<<<< HEAD
 				progs->progs[cnt++] = pl->prog;
 =======
 				rcu_dereference_protected(progs, 1)->
 					progs[cnt++] = pl->prog;
 >>>>>>> 373757b071a4 (UPSTREAM: bpf: multi program support for cgroup+bpf)
+=======
+				progs->progs[cnt++] = pl->prog;
+>>>>>>> b08614b4f428 (UPSTREAM: bpf: fix rcu annotations in compute_effective_progs())
 			}
 		p = cgroup_parent(p);
 	} while (p);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	rcu_assign_pointer(*array, progs);
 =======
 	*array = progs;
 >>>>>>> 373757b071a4 (UPSTREAM: bpf: multi program support for cgroup+bpf)
+=======
+	rcu_assign_pointer(*array, progs);
+>>>>>>> b08614b4f428 (UPSTREAM: bpf: fix rcu annotations in compute_effective_progs())
 	return 0;
 }
 
