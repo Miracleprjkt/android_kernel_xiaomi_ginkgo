@@ -193,6 +193,7 @@ void bpf_verifier_vlog(struct bpf_verifier_log *log,
  */
 __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_log *log,
 						  const char *fmt, ...)
+<<<<<<< HEAD
 {
 	va_list args;
 
@@ -209,10 +210,12 @@ EXPORT_SYMBOL_GPL(bpf_verifier_log_write);
  * the verifier to avoid complicating backports. Hence the alias below.
  */
 static __printf(1, 2) void verbose(const char *fmt, ...)
+=======
+>>>>>>> 22bc02a1efe3 (bpf: Update logging functions to work with BTF)
 {
-	struct bpf_verifier_log *log = &verifier_log;
 	va_list args;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	if (!bpf_verifier_log_needed(&verifier_log))
 		return;
@@ -227,6 +230,29 @@ static __printf(1, 2) void verbose(const char *fmt, ...)
 	log->len_used += vscnprintf(log->kbuf + log->len_used,
 				    log->len_total - log->len_used, fmt, args);
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+	if (!bpf_verifier_log_needed(log))
+		return;
+
+	va_start(args, fmt);
+	bpf_verifier_vlog(log, fmt, args);
+	va_end(args);
+}
+EXPORT_SYMBOL_GPL(bpf_verifier_log_write);
+/* Historically bpf_verifier_log_write was called verbose, but the name was too
+ * generic for symbol export. The function was renamed, but not the calls in
+ * the verifier to avoid complicating backports. Hence the alias below.
+ */
+static __printf(1, 2) void verbose(const char *fmt, ...)
+{
+	va_list args;
+
+	if (!bpf_verifier_log_needed(&verifier_log))
+		return;
+
+	va_start(args, fmt);
+	bpf_verifier_vlog(&verifier_log, fmt, args);
+>>>>>>> 22bc02a1efe3 (bpf: Update logging functions to work with BTF)
 	va_end(args);
 }
 
@@ -5225,11 +5251,14 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr)
 
 		ret = -ENOMEM;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		log->kbuf = vmalloc(log->len_total);
 		if (!log->kbuf)
 			goto err_unlock;
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+>>>>>>> 22bc02a1efe3 (bpf: Update logging functions to work with BTF)
 	} else {
 		log->level = 0;
 	}
@@ -5283,6 +5312,7 @@ skip_full_check:
 
 	if (log->level && bpf_verifier_log_full(log)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		BUG_ON(log->len_used >= log->len_total);
 		/* verifier log exceeded user supplied buffer */
@@ -5297,6 +5327,12 @@ skip_full_check:
 	if (log->level && copy_to_user(log->ubuf, log->kbuf,
 				       log->len_used + 1) != 0) {
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+		ret = -ENOSPC;
+	}
+
+	if (log->level && !log->ubuf) {
+>>>>>>> 22bc02a1efe3 (bpf: Update logging functions to work with BTF)
 		ret = -EFAULT;
 		goto err_release_maps;
 	}
@@ -5323,12 +5359,16 @@ skip_full_check:
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 err_release_maps:
 =======
 free_log_buf:
 	if (log->level)
 		vfree(log->kbuf);
 >>>>>>> 9c211c7caa56 (BACKPORT: bpf: encapsulate verifier log state into a structure)
+=======
+err_release_maps:
+>>>>>>> 22bc02a1efe3 (bpf: Update logging functions to work with BTF)
 	if (!env->prog->aux->used_maps)
 		/* if we didn't copy map pointers into bpf_prog_info, release
 		 * them now. Otherwise free_used_maps() will release them.
